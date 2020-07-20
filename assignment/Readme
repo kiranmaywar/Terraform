@@ -1,0 +1,52 @@
+#How to Run and dependencies 
+
+1) You will need terrafrom command to provision the resources on aws
+
+2) You will require access_key and secret_key of an IAM user and for testing purpose attach admin access policy to the user.
+
+3) Create ec2 keypair with name terraform on aws before running the terraform.
+
+4) Load these keys in your running bash/zsh terminal 
+
+export AWS_ACCESS_KEY_ID="anaccesskey"
+export AWS_SECRET_ACCESS_KEY="asecretkey"
+
+terraform init -input=false
+terraform plan -input=false
+terraform apply -auto-approve -input=false
+
+HOW to ssh on web machine's 
+
+ssh -A -i terrafrom.pem ec2-user@<bastion>
+ssh ec2-user@<frontendip>
+
+from there do curl on app instance 
+curl <appip>:80
+
+Questions:
+
+#How would you make this deployment fault tolerant and highly available?
+
+For acheving fault tolerant and higjly avaialble architecure we can follow below points:
+
+- Configure separate root and data EBS volumes. 
+- Create snapshots of EBS data volumes.
+- Create Amazon Machine Images of your app servers.
+- Use multiple instances and multiple zones.
+- Centralize sessions, content and the database.
+- Use auto-scaling groups for your app servers.
+- Off-load database requests to read replicas or to in-memory databases.
+- Use a Content Distribution Network to deliver content to users around the world.
+- Use signed URLs when delivering private content.
+- Configure security using the principle of least privileges.
+- Use an automation platform for frequent deployments. 
+
+#How would you make this deployment more secure? 
+
+We can make this deployment more secure by using Open VPN , Open vpn will not allow  connection open on port 22 from Internet. Also, we can make application server and webserver in private subnet with bastion 
+host sit in public subnet. We can include elastic load balancers to give request to webserver over SSL. Allow only specific IP address in inbound connections  with specific ports.
+
+How would you make this deployment cloud agnostic?
+
+Terraform is cloud-agnostic and allows a single configuration to be used to manage multiple providers, and to even handle cross-cloud dependencies 
+
